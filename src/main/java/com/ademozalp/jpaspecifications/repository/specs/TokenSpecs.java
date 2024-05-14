@@ -3,6 +3,8 @@ package com.ademozalp.jpaspecifications.repository.specs;
 import com.ademozalp.jpaspecifications.model.Token;
 import com.ademozalp.jpaspecifications.model.Token_;
 import com.ademozalp.jpaspecifications.model.User_;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
@@ -10,7 +12,13 @@ import java.time.LocalDateTime;
 public class TokenSpecs {
 
     public static Specification<Token> hasId(Long id){
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(Token_.ID), id);
+        return (root, query, criteriaBuilder) -> {
+            Predicate equal = criteriaBuilder.equal(root.get(Token_.ID), id);
+
+            CriteriaQuery<?> where = query.where(equal).distinct(true).orderBy(criteriaBuilder.asc(root.get(Token_.ID)));
+
+            return where.getGroupRestriction();
+        };
     }
 
     public static Specification<Token> byToken(String token){
