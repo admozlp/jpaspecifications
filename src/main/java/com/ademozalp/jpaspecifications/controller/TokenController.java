@@ -5,12 +5,9 @@ import com.ademozalp.jpaspecifications.helper.DataResult;
 import com.ademozalp.jpaspecifications.helper.StatusCode;
 import com.ademozalp.jpaspecifications.service.TokenService;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.status.StatusConsoleListener;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -22,8 +19,8 @@ public class TokenController {
     private final TokenService tokenService;
 
     @GetMapping
-    public DataResult<List<TokenResponseDto>> findTokenByCriteria(Map<String, String> searchCriteria){
-        List<TokenResponseDto> data = tokenService.findTokenByCriteria(searchCriteria);
+    public DataResult<List<TokenResponseDto>> findTokenByCriteria(@RequestBody Map<String, String> searchCriteria, @RequestHeader String sortField) {
+        List<TokenResponseDto> data = tokenService.findTokenByCriteria(searchCriteria, sortField);
 
         return DataResult.<List<TokenResponseDto>>builder()
                 .data(data)

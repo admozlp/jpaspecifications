@@ -5,6 +5,9 @@ import com.ademozalp.jpaspecifications.model.Token;
 import com.ademozalp.jpaspecifications.repository.TokenRepository;
 import com.ademozalp.jpaspecifications.repository.specs.TokenSpecs;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -17,8 +20,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TokenService {
     private final TokenRepository tokenRepository;
+    private final JsonDataService jsonDataService;
 
-    public List<TokenResponseDto> findTokenByCriteria(Map<String, String> searchCriteria) {
+//    @PostConstruct
+//    private void readTokensFromJson(){
+//        List<Token> tokens = jsonDataService.readTokensFromJson();
+//        tokenRepository.saveAll(tokens);
+//    }
+
+    public List<TokenResponseDto> findTokenByCriteria(Map<String, String> searchCriteria, String sortField) {
         Specification<Token> spec = Specification.where(null);
 
         for(Map.Entry<String, String> entry : searchCriteria.entrySet()){
@@ -39,7 +49,6 @@ public class TokenService {
                 };
             }
         }
-
-        return tokenRepository.findAll(spec).stream().map(TokenResponseDto::convert).toList();
+        return tokenRepository.findAll(spec, Sort.by(Sort.Direction.ASC, sortField)).stream().map(TokenResponseDto::convert).toList();
     }
 }
