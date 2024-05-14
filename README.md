@@ -1,5 +1,10 @@
 # Getting Started
 
+### Jpa specifications kullanarak dinamik sorguların oluşturulması.
+
+* Java 21
+* Spring Boot 3.2.5
+* Spring Boot Data Jpa : Specifications
 
 
 ### Reference Documentation
